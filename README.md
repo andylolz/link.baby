@@ -1,6 +1,8 @@
 link.baby
 =========
 
+![logo inspiration](logo-inspiration.png)
+
 At the end of a meetup or event, it’s really tempting to set up a [mailing list](https://en.wikipedia.org/wiki/Electronic_mailing_list) / [slack](https://slack.com/) / [whatsapp](https://www.whatsapp.com) group etc to “keep the conversation going”. But for a number of reasons, these rarely work out.
 
 Instead:
