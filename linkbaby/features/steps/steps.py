@@ -1,6 +1,6 @@
 from behave import given, when, then
 
-from factories import EventFactory, EventAttendeeFactory
+from linkbaby.factories import EventFactory, EventAttendeeFactory
 from linkbaby.models import Event, EventAttendee, Introduction
 
 
