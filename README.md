@@ -11,3 +11,5 @@ Instead:
  2. [link.baby](https://link.baby) contacts all participants with the facilitator’s introductory email. Participants are asked to opt in by clicking a link and providing a short bio.
  3. Those who opt in then receive a series of emails from [link.baby](https://link.baby) – one per day – introducing them to a different attendee
  4. Participants can opt out at any time, using the opt out link
+
+[![Build Status](https://travis-ci.org/andylolz/link.baby.svg?branch=master)](https://travis-ci.org/andylolz/link.baby)
