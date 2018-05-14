@@ -1,0 +1,3 @@
+-r requirements.txt
+behave-django
+factory_boy
