@@ -51,11 +51,15 @@ class EventAttendee(models.Model):
         return False
 
     def unsubscribe(self):
+        if self.unsubscribed_at is not None:
+            raise Exception('Already unsubscribed')
         self.unsubscribed_at = timezone.now()
         self.save()
         self.delete_introductions()
 
     def subscribe(self):
+        if self.subscribed_at is not None:
+            raise Exception('Already subscribed')
         self.subscribed_at = timezone.now()
         self.save()
         self.initialise_introductions()
