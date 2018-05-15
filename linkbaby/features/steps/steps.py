@@ -30,11 +30,14 @@ def step_attendee_unsubscribes(context, name):
     attendee.unsubscribe()
 
 
-@then('an introduction should be created between {name1} and {name2}')
+@then('an unscheduled introduction should be created ' +
+      'between {name1} and {name2}')
 def step_an_introduction_should_exist(context, name1, name2):
     intro = Introduction.objects.filter(
         recipients__name=name1).filter(
-        recipients__name=name2)
+        recipients__name=name2).filter(
+        scheduled_at__isnull=True,
+    )
     context.test.assertEqual(len(intro), 1)
 
 
