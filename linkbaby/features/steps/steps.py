@@ -21,7 +21,13 @@ def step_the_event_has_an_attendee(context, name):
 @when('{name} subscribes to introductions')
 def step_attendee_subscribes_to_introductions(context, name):
     attendee = EventAttendee.objects.get(name=name)
-    attendee.subscribe_to_introductions()
+    attendee.subscribe()
+
+
+@when('{name} unsubscribes')
+def step_attendee_unsubscribes(context, name):
+    attendee = EventAttendee.objects.get(name=name)
+    attendee.unsubscribe()
 
 
 @then('an introduction should be created between {name1} and {name2}')

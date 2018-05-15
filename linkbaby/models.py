@@ -16,6 +16,13 @@ class Event(models.Model):
     welcome_message = models.TextField()
     took_place_at = models.DateTimeField(null=True)
 
+    @property
+    def subscribed_attendees(self):
+        return self.eventattendee_set.filter(
+            subscribed_at__isnull=False,
+            unsubscribed_at__isnull=True,
+        )
+
     def __str__(self):
         return self.name
 
@@ -42,28 +49,30 @@ class EventAttendee(models.Model):
             return True
         return False
 
-    def subscribe_to_introductions(self):
+    def unsubscribe(self):
+        self.unsubscribed_at = timezone.now()
+        self.save()
+        self.delete_introductions()
+
+    def subscribe(self):
         self.subscribed_at = timezone.now()
         self.save()
         self.initialise_introductions()
 
     def initialise_introductions(self):
-        others = list(
-            EventAttendee.objects.filter(
-                event=self.event,
-                subscribed_at__isnull=False,
-                unsubscribed_at__isnull=True,
-            ).exclude(
-                pk=self.pk,
-            )
-        )
-        for other in others:
-            if not other.is_subscribed:
+        subscribers = list(self.event.subscribed_attendees)
+        for subscriber in subscribers:
+            if subscriber == self:
+                continue
+            if not subscriber.is_subscribed:
                 continue
             intro = Introduction(event=self.event)
             intro.save()
-            intro.recipients.add(other)
+            intro.recipients.add(subscriber)
             intro.recipients.add(self)
+
+    def delete_introductions(self):
+        self.introduction_set.all().delete()
 
     def __str__(self):
         return self.name

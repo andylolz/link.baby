@@ -21,3 +21,11 @@ Scenario: Test a more complicated introduction
     And an introduction should be created between Alice and Charlie
     And an introduction should be created between Bob and Charlie
     And the total number of introductions should be 3
+
+Scenario: Test event unsubscribe
+    When Alice subscribes to introductions
+    And Bob subscribes to introductions
+    And Charlie subscribes to introductions
+    And Alice unsubscribes
+    Then an introduction should be created between Bob and Charlie
+    And the total number of introductions should be 1
