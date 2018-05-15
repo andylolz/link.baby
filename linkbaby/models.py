@@ -65,6 +65,7 @@ class EventAttendee(models.Model):
         self.initialise_introductions()
 
     def initialise_introductions(self):
+        # TODO: prevent re-initialisation
         for subscriber in self.event.subscribed_attendees:
             if subscriber == self:
                 continue
