@@ -24,11 +24,9 @@ def step_attendee_subscribes_to_introductions(context, name):
     attendee.subscribe_to_introductions()
 
 
-@then('an introduction should be created between {name1} and {name2}')
-def step_an_introduction_should_be_created(context, name1, name2):
-    attendee1 = EventAttendee.objects.get(name=name1)
-    attendee2 = EventAttendee.objects.get(name=name2)
-    intro = Introduction.objects.get()
-    recipients = intro.recipients.all()
-    context.test.assertIn(attendee1, recipients)
-    context.test.assertIn(attendee2, recipients)
+@then('an introduction should exist between {name1} and {name2}')
+def step_an_introduction_should_exist(context, name1, name2):
+    intro = Introduction.objects.filter(
+        recipients__name=name1).filter(
+        recipients__name=name2)
+    context.test.assertEqual(len(intro), 1)
