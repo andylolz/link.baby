@@ -10,14 +10,14 @@ Background:
 Scenario: Test a simple introduction
     When Alice subscribes to introductions
     And Bob subscribes to introductions
-    Then an introduction should exist between Alice and Bob
+    Then an introduction should be created between Alice and Bob
     And the total number of introductions should be 1
 
 Scenario: Test a more complicated introduction
     When Alice subscribes to introductions
     And Bob subscribes to introductions
     And Charlie subscribes to introductions
-    Then an introduction should exist between Alice and Bob
-    And an introduction should exist between Alice and Charlie
-    And an introduction should exist between Bob and Charlie
+    Then an introduction should be created between Alice and Bob
+    And an introduction should be created between Alice and Charlie
+    And an introduction should be created between Bob and Charlie
     And the total number of introductions should be 3

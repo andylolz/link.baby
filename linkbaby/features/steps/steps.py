@@ -24,7 +24,7 @@ def step_attendee_subscribes_to_introductions(context, name):
     attendee.subscribe_to_introductions()
 
 
-@then('an introduction should exist between {name1} and {name2}')
+@then('an introduction should be created between {name1} and {name2}')
 def step_an_introduction_should_exist(context, name1, name2):
     intro = Introduction.objects.filter(
         recipients__name=name1).filter(
