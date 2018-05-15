@@ -30,3 +30,8 @@ def step_an_introduction_should_exist(context, name1, name2):
         recipients__name=name1).filter(
         recipients__name=name2)
     context.test.assertEqual(len(intro), 1)
+
+
+@then('the total number of introductions should be {num:d}')
+def step_the_total_number_of_introductions_should_be_num(context, num):
+    context.test.assertEqual(Introduction.objects.count(), num)
