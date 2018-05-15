@@ -5,7 +5,7 @@ Background:
     And the event has an attendee called Alice
     And the event has an attendee called Bob
     And the event has an attendee called Charlie
-    And the event has an attendee called Dean
+    And the event has an attendee called Daisy
 
 Scenario: Test a simple introduction
     When Alice subscribes to introductions
