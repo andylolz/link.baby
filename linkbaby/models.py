@@ -44,6 +44,7 @@ class EventAttendee(models.Model):
         if self.unsubscribed_at is not None:
             return False
         try:
+            # check global unsubscribe
             Unsubscribe.objects.get(email=self.email)
         except:
             return True
@@ -60,8 +61,7 @@ class EventAttendee(models.Model):
         self.initialise_introductions()
 
     def initialise_introductions(self):
-        subscribers = list(self.event.subscribed_attendees)
-        for subscriber in subscribers:
+        for subscriber in self.event.subscribed_attendees:
             if subscriber == self:
                 continue
             if not subscriber.is_subscribed:
