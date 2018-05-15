@@ -107,6 +107,10 @@ class Introduction(models.Model):
     #                     x += 1
     #                     break
 
+    def __str__(self):
+        recipients = self.recipients.all()
+        return ', '.join([str(r) for r in recipients])
+
 
 class Email(models.Model):
     pass
