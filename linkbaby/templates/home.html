@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <h1>link.baby</h1>
+
+    <img src="{% static "img/octo.png" %}" />
+
+    <p>Hello, hello</p>
+    <a href="{% url 'create' %}">Get started</a>
+{% endblock content %}
+
