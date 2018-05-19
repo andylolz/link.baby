@@ -1,13 +1,13 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
 
 class EventOrganiser(models.Model):
-    name = models.CharField(max_length=200)
-    email = models.EmailField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.user.get_full_name()
 
 
 class Event(models.Model):
@@ -28,8 +28,7 @@ class Event(models.Model):
 
 
 class EventAttendee(models.Model):
-    name = models.CharField(max_length=200)
-    email = models.EmailField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     last_contacted_at = models.DateTimeField(null=True)
@@ -80,7 +79,7 @@ class EventAttendee(models.Model):
         self.introduction_set.all().delete()
 
     def __str__(self):
-        return self.name
+        return self.user.get_full_name()
 
 
 class Unsubscribe(models.Model):
