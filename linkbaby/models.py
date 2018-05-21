@@ -1,10 +1,27 @@
-from django.contrib.auth.models import User
+import random
+import string
+
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 
 
+class LinkbabyUser(AbstractUser):
+    def save(self, *args, **kwargs):
+        if not self.username:
+            chars = string.ascii_lowercase + string.digits
+            while True:
+                username = ''.join([random.choice(chars) for _ in range(8)])
+                try:
+                    LinkbabyUser.objects.get(username=username)
+                except LinkbabyUser.DoesNotExist:
+                    break
+            self.username = username
+        super(LinkbabyUser, self).save(*args, **kwargs)
+
+
 class EventOrganiser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(LinkbabyUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.get_full_name()
@@ -28,7 +45,7 @@ class Event(models.Model):
 
 
 class EventAttendee(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(LinkbabyUser, on_delete=models.CASCADE)
     bio = models.TextField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     last_contacted_at = models.DateTimeField(null=True)

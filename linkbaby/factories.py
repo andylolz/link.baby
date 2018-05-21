@@ -1,14 +1,12 @@
-from django.contrib.auth.models import User
 import factory
 
-from linkbaby.models import Event, EventOrganiser, EventAttendee
+from linkbaby.models import Event, EventOrganiser, EventAttendee, LinkbabyUser
 
 
 class UserFactory(factory.DjangoModelFactory):
     class Meta:
-        model = User
+        model = LinkbabyUser
 
-    username = factory.LazyAttribute(lambda x: x.first_name)
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     email = factory.LazyAttribute(lambda x: '{}.{}@example.com'.format(
