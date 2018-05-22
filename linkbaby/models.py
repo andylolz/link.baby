@@ -9,6 +9,12 @@ from django.utils.translation import gettext_lazy as _
 
 class LinkbabyUser(AbstractUser):
     name = models.CharField(max_length=200)
+    email = models.EmailField(_('email address'), blank=False, null=False,
+                              unique=True)
+    unsubscribed_at = models.DateTimeField(auto_now_add=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     @property
     def first_name(self):
@@ -51,9 +57,10 @@ class EventOrganiser(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=200)
-    organiser = models.ForeignKey(EventOrganiser, on_delete=models.CASCADE)
+    organiser = models.ForeignKey(EventOrganiser, on_delete=models.CASCADE,
+                                  blank=False, null=False)
     welcome_message = models.TextField()
-    took_place_at = models.DateTimeField(null=True)
+    took_place_at = models.DateTimeField(blank=True, null=True)
 
     @property
     def subscribed_attendees(self):
@@ -67,7 +74,7 @@ class Event(models.Model):
 
 
 class EventAttendee(models.Model):
-    user = models.OneToOneField(LinkbabyUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(LinkbabyUser, on_delete=models.CASCADE)
     bio = models.TextField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     last_contacted_at = models.DateTimeField(null=True)
@@ -121,14 +128,6 @@ class EventAttendee(models.Model):
         return self.user.get_full_name()
 
 
-class Unsubscribe(models.Model):
-    email = models.EmailField()
-    unsubscribed_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.email
-
-
 class Introduction(models.Model):
     recipients = models.ManyToManyField(EventAttendee)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -153,7 +152,3 @@ class Introduction(models.Model):
     def __str__(self):
         recipients = self.recipients.all()
         return ', '.join([str(r) for r in recipients])
-
-
-class Email(models.Model):
-    pass

@@ -30,6 +30,7 @@ class Migration(migrations.Migration):
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('name', models.CharField(max_length=200)),
                 ('email', models.EmailField(max_length=254, unique=True, verbose_name='email address')),
+                ('unsubscribed_at', models.DateTimeField(auto_now_add=True)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
             ],
@@ -43,18 +44,12 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Email',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-            ],
-        ),
-        migrations.CreateModel(
             name='Event',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200)),
                 ('welcome_message', models.TextField()),
-                ('took_place_at', models.DateTimeField(null=True)),
+                ('took_place_at', models.DateTimeField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -67,7 +62,7 @@ class Migration(migrations.Migration):
                 ('subscribed_at', models.DateTimeField(null=True)),
                 ('unsubscribed_at', models.DateTimeField(null=True)),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='linkbaby.Event')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -85,14 +80,6 @@ class Migration(migrations.Migration):
                 ('introduced_at', models.DateTimeField(null=True)),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='linkbaby.Event')),
                 ('recipients', models.ManyToManyField(to='linkbaby.EventAttendee')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Unsubscribe',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=254)),
-                ('unsubscribed_at', models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.AddField(
