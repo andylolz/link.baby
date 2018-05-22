@@ -4,14 +4,36 @@ import string
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class LinkbabyUser(AbstractUser):
+    name = models.CharField(max_length=200)
+
+    @property
+    def first_name(self):
+        return self.name.split(' ', maxsplit=1)[0]
+
+    @property
+    def last_name(self):
+        spl = self.name.split(' ', maxsplit=1)
+        if len(spl) > 1:
+            return spl[1]
+        else:
+            return ''
+
+    def get_full_name(self):
+        return self.name
+
+    def get_short_name(self):
+        return self.first_name
+
     def save(self, *args, **kwargs):
         if not self.username:
             chars = string.ascii_lowercase + string.digits
             while True:
-                username = ''.join([random.choice(chars) for _ in range(8)])
+                username = ''.join([random.choice(chars)
+                                    for _ in range(20)])
                 try:
                     LinkbabyUser.objects.get(username=username)
                 except LinkbabyUser.DoesNotExist:

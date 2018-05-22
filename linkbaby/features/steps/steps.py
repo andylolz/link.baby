@@ -14,20 +14,20 @@ def step_an_event(context):
 def step_the_event_has_an_attendee(context, name):
     event = Event.objects.first()
     EventAttendeeFactory(
-        user__first_name=name,
+        user__name=name,
         event=event
     )
 
 
 @when('{name} subscribes to introductions')
 def step_attendee_subscribes_to_introductions(context, name):
-    attendee = EventAttendee.objects.get(user__first_name=name)
+    attendee = EventAttendee.objects.get(user__name=name)
     attendee.subscribe()
 
 
 @when('{name} unsubscribes')
 def step_attendee_unsubscribes(context, name):
-    attendee = EventAttendee.objects.get(user__first_name=name)
+    attendee = EventAttendee.objects.get(user__name=name)
     attendee.unsubscribe()
 
 
@@ -35,8 +35,8 @@ def step_attendee_unsubscribes(context, name):
       'between {name1} and {name2}')
 def step_an_introduction_should_exist(context, name1, name2):
     intro = Introduction.objects.filter(
-        recipients__user__first_name=name1).filter(
-        recipients__user__first_name=name2).filter(
+        recipients__user__name=name1).filter(
+        recipients__user__name=name2).filter(
         scheduled_at__isnull=True,
     )
     context.test.assertEqual(len(intro), 1)

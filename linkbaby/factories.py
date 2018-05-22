@@ -7,10 +7,9 @@ class UserFactory(factory.DjangoModelFactory):
     class Meta:
         model = LinkbabyUser
 
-    first_name = factory.Faker('first_name')
-    last_name = factory.Faker('last_name')
-    email = factory.LazyAttribute(lambda x: '{}.{}@example.com'.format(
-        x.first_name.lower(), x.last_name.lower()))
+    name = factory.Faker('name')
+    email = factory.LazyAttribute(lambda x: '{}@example.com'.format(
+        '.'.join(x.name.lower().split(' '))))
 
 
 class EventOrganiserFactory(factory.DjangoModelFactory):
