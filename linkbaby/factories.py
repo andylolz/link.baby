@@ -1,6 +1,6 @@
 import factory
 
-from linkbaby.models import Event, EventOrganiser, EventAttendee, LinkbabyUser
+from .models import Event, EventOrganiser, EventAttendee, LinkbabyUser
 
 
 class UserFactory(factory.DjangoModelFactory):
