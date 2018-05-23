@@ -2,9 +2,11 @@ from django.forms import modelform_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from django.conf import settings
+from django.apps import apps
 # from django.core.mail import send_mail
 
-from .models import EventOrganiser, LinkbabyUser
+from .models import EventOrganiser
 
 
 class HomeView(TemplateView):
@@ -13,7 +15,7 @@ class HomeView(TemplateView):
 
 def eventorganiser_create(request):
     template_name = 'event_organiser_create.html'
-    UserForm = modelform_factory(LinkbabyUser,
+    UserForm = modelform_factory(apps.get_model(settings.AUTH_USER_MODEL),
                                  fields=('email',))
     EventOrganiserForm = modelform_factory(EventOrganiser, exclude=('user',))
     if request.method == 'POST':
