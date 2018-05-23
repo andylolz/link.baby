@@ -61,7 +61,7 @@ class Event(models.Model):
     name = models.CharField(max_length=200, verbose_name='Event name')
     organiser = models.ForeignKey(EventOrganiser, on_delete=models.CASCADE,
                                   blank=False, null=False)
-    welcome_message = models.TextField()
+    welcome_message = models.TextField(blank=True, null=False)
     took_place_at = models.DateTimeField(blank=True, null=True)
 
     @property
