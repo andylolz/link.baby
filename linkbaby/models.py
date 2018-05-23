@@ -11,7 +11,7 @@ class LinkbabyUser(AbstractUser):
     name = models.CharField(max_length=200)
     email = models.EmailField(_('email address'), blank=False, null=False,
                               unique=True)
-    unsubscribed_at = models.DateTimeField(auto_now_add=True)
+    unsubscribed_at = models.DateTimeField(null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -88,12 +88,10 @@ class EventAttendee(models.Model):
             return False
         if self.unsubscribed_at is not None:
             return False
-        try:
             # check global unsubscribe
-            Unsubscribe.objects.get(email=self.email)
-        except:
-            return True
-        return False
+        if self.user.unsubscribed_at is not None:
+            return False
+        return True
 
     def unsubscribe(self):
         if self.unsubscribed_at is not None:
