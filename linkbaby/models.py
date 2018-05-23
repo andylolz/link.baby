@@ -49,7 +49,7 @@ class LinkbabyUser(AbstractUser):
         super(LinkbabyUser, self).save(*args, **kwargs)
 
 
-class EventOrganiser(models.Model):
+class Host(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
 
@@ -57,16 +57,16 @@ class EventOrganiser(models.Model):
         return self.user.get_full_name()
 
 
-class Event(models.Model):
-    name = models.CharField(max_length=200, verbose_name='Event name')
-    organiser = models.ForeignKey(EventOrganiser, on_delete=models.CASCADE,
-                                  blank=False, null=False)
+class Linkup(models.Model):
+    name = models.CharField(max_length=200, verbose_name='Linkup name')
+    host = models.ForeignKey(Host, on_delete=models.CASCADE,
+                             blank=False, null=False)
     welcome_message = models.TextField(blank=True, null=False)
     took_place_at = models.DateTimeField(blank=True, null=True)
 
     @property
-    def subscribed_attendees(self):
-        return self.eventattendee_set.filter(
+    def subscribed_linkees(self):
+        return self.linkee_set.filter(
             subscribed_at__isnull=False,
             unsubscribed_at__isnull=True,
         )
@@ -75,11 +75,11 @@ class Event(models.Model):
         return self.name
 
 
-class EventAttendee(models.Model):
+class Linkee(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     bio = models.TextField()
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    linkup = models.ForeignKey(Linkup, on_delete=models.CASCADE)
     last_contacted_at = models.DateTimeField(null=True)
     last_scheduled_at = models.DateTimeField(null=True)
     subscribed_at = models.DateTimeField(null=True)
@@ -112,12 +112,12 @@ class EventAttendee(models.Model):
 
     def initialise_introductions(self):
         # TODO: prevent re-initialisation
-        for subscriber in self.event.subscribed_attendees:
+        for subscriber in self.linkup.subscribed_linkees:
             if subscriber == self:
                 continue
             if not subscriber.is_subscribed:
                 continue
-            intro = Introduction(event=self.event)
+            intro = Introduction(linkup=self.linkup)
             intro.save()
             intro.recipients.add(subscriber)
             intro.recipients.add(self)
@@ -130,8 +130,8 @@ class EventAttendee(models.Model):
 
 
 class Introduction(models.Model):
-    recipients = models.ManyToManyField(EventAttendee)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    recipients = models.ManyToManyField(Linkee)
+    linkup = models.ForeignKey(Linkup, on_delete=models.CASCADE)
     scheduled_at = models.DateTimeField(null=True)
     introduced_at = models.DateTimeField(null=True)
 

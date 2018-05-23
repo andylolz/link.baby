@@ -2,13 +2,14 @@
 {% load staticfiles %}
 
 {% block content %}
-<h1>Sign up or log in</h1>
+<h1>Create an linkup</h1>
 
 <form method="post" novalidate>
     {% csrf_token %}
-    {% for form in forms %}
-        {% include 'form.html' with form=form %}
+    {% for f in formset %}
+        {% include 'form.html' with form=f %}
     {% endfor %}
+
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {% endblock content %}

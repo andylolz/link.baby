@@ -1,33 +1,33 @@
 from django.test import Client
 from behave import given, when, then
 
-from linkbaby.factories import EventFactory, EventAttendeeFactory
-from linkbaby.models import Event, EventAttendee, Introduction
+from linkbaby.factories import LinkupFactory, LinkeeFactory
+from linkbaby.models import Linkup, Linkee, Introduction
 
 
-@given('an event')
-def step_an_event(context):
-    EventFactory()
+@given('a linkup')
+def step_a_linkup(context):
+    LinkupFactory()
 
 
-@given('the event has an attendee called {name}')
-def step_the_event_has_an_attendee(context, name):
-    event = Event.objects.first()
-    EventAttendeeFactory(
+@given('the linkup has a linkee called {name}')
+def step_the_linkup_has_a_linkee(context, name):
+    linkup = Linkup.objects.first()
+    LinkeeFactory(
         user__name=name,
-        event=event
+        linkup=linkup
     )
 
 
 @when('{name} subscribes to introductions')
 def step_attendee_subscribes_to_introductions(context, name):
-    attendee = EventAttendee.objects.get(user__name=name)
+    attendee = Linkee.objects.get(user__name=name)
     attendee.subscribe()
 
 
 @when('{name} unsubscribes')
 def step_attendee_unsubscribes(context, name):
-    attendee = EventAttendee.objects.get(user__name=name)
+    attendee = Linkee.objects.get(user__name=name)
     attendee.unsubscribe()
 
 

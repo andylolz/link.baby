@@ -1,6 +1,6 @@
 import factory
 
-from .models import Event, EventOrganiser, EventAttendee, LinkbabyUser
+from .models import Linkup, Host, Linkee, LinkbabyUser
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -12,26 +12,26 @@ class UserFactory(factory.DjangoModelFactory):
         '.'.join(x.name.lower().split(' '))))
 
 
-class EventOrganiserFactory(factory.DjangoModelFactory):
+class HostFactory(factory.DjangoModelFactory):
     class Meta:
-        model = EventOrganiser
+        model = Host
 
     user = factory.SubFactory(UserFactory)
 
 
-class EventFactory(factory.DjangoModelFactory):
+class LinkupFactory(factory.DjangoModelFactory):
     class Meta:
-        model = Event
+        model = Linkup
 
-    organiser = factory.SubFactory(EventOrganiserFactory)
-    name = factory.LazyAttribute(lambda x: '{}’s awesome event'.format(
-        x.organiser.user.first_name))
+    host = factory.SubFactory(HostFactory)
+    name = factory.LazyAttribute(lambda x: '{}’s awesome linkup'.format(
+        x.host.user.first_name))
 
 
-class EventAttendeeFactory(factory.DjangoModelFactory):
+class LinkeeFactory(factory.DjangoModelFactory):
     class Meta:
-        model = EventAttendee
+        model = Linkee
 
     user = factory.SubFactory(UserFactory)
     bio = factory.Faker('paragraph')
-    event = factory.SubFactory(EventFactory)
+    linkup = factory.SubFactory(LinkupFactory)

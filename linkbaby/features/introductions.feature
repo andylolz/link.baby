@@ -1,11 +1,11 @@
 Feature: Introductions
 
 Background:
-    Given an event
-    And the event has an attendee called Alice
-    And the event has an attendee called Bob
-    And the event has an attendee called Charlie
-    And the event has an attendee called Daisy
+    Given a linkup
+    And the linkup has a linkee called Alice
+    And the linkup has a linkee called Bob
+    And the linkup has a linkee called Charlie
+    And the linkup has a linkee called Daisy
 
 Scenario: Test a simple introduction
     When Alice subscribes to introductions
