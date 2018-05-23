@@ -1,57 +1,12 @@
-import random
-import string
-
-from django.conf import settings
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
-class LinkbabyUser(AbstractUser):
+class Host(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(_('email address'), blank=False, null=False,
                               unique=True)
-    unsubscribed_at = models.DateTimeField(null=True)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
-
-    @property
-    def first_name(self):
-        return self.name.split(' ', maxsplit=1)[0]
-
-    @property
-    def last_name(self):
-        spl = self.name.split(' ', maxsplit=1)
-        if len(spl) > 1:
-            return spl[1]
-        else:
-            return ''
-
-    def get_full_name(self):
-        return self.name
-
-    def get_short_name(self):
-        return self.first_name
-
-    def save(self, *args, **kwargs):
-        if not self.username:
-            chars = string.ascii_lowercase + string.digits
-            while True:
-                username = ''.join([random.choice(chars)
-                                    for _ in range(20)])
-                try:
-                    LinkbabyUser.objects.get(username=username)
-                except LinkbabyUser.DoesNotExist:
-                    break
-            self.username = username
-        super(LinkbabyUser, self).save(*args, **kwargs)
-
-
-class Host(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.get_full_name()
@@ -75,8 +30,9 @@ class Linkup(models.Model):
 
 
 class Linkee(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    email = models.EmailField(_('email address'), blank=False, null=False,
+                              unique=True)
     bio = models.TextField()
     linkup = models.ForeignKey(Linkup, on_delete=models.CASCADE)
     last_contacted_at = models.DateTimeField(null=True)
@@ -89,9 +45,6 @@ class Linkee(models.Model):
         if self.subscribed_at is None:
             return False
         if self.unsubscribed_at is not None:
-            return False
-            # check global unsubscribe
-        if self.user.unsubscribed_at is not None:
             return False
         return True
 

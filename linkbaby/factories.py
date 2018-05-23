@@ -1,22 +1,15 @@
 import factory
 
-from .models import Linkup, Host, Linkee, LinkbabyUser
-
-
-class UserFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = LinkbabyUser
-
-    name = factory.Faker('name')
-    email = factory.LazyAttribute(lambda x: '{}@example.com'.format(
-        '.'.join(x.name.lower().split(' '))))
+from .models import Linkup, Host, Linkee
 
 
 class HostFactory(factory.DjangoModelFactory):
     class Meta:
         model = Host
 
-    user = factory.SubFactory(UserFactory)
+    name = factory.Faker('name')
+    email = factory.LazyAttribute(lambda x: '{}@example.com'.format(
+        '.'.join(x.name.lower().split(' '))))
 
 
 class LinkupFactory(factory.DjangoModelFactory):
@@ -25,13 +18,15 @@ class LinkupFactory(factory.DjangoModelFactory):
 
     host = factory.SubFactory(HostFactory)
     name = factory.LazyAttribute(lambda x: '{}’s awesome linkup'.format(
-        x.host.user.first_name))
+        x.host.name.split(' ')[0]))
 
 
 class LinkeeFactory(factory.DjangoModelFactory):
     class Meta:
         model = Linkee
 
-    user = factory.SubFactory(UserFactory)
+    name = factory.Faker('name')
+    email = factory.LazyAttribute(lambda x: '{}@example.com'.format(
+        '.'.join(x.name.lower().split(' '))))
     bio = factory.Faker('paragraph')
     linkup = factory.SubFactory(LinkupFactory)

@@ -14,20 +14,20 @@ def step_a_linkup(context):
 def step_the_linkup_has_a_linkee(context, name):
     linkup = Linkup.objects.first()
     LinkeeFactory(
-        user__name=name,
+        name=name,
         linkup=linkup
     )
 
 
 @when('{name} subscribes to introductions')
 def step_attendee_subscribes_to_introductions(context, name):
-    attendee = Linkee.objects.get(user__name=name)
+    attendee = Linkee.objects.get(name=name)
     attendee.subscribe()
 
 
 @when('{name} unsubscribes')
 def step_attendee_unsubscribes(context, name):
-    attendee = Linkee.objects.get(user__name=name)
+    attendee = Linkee.objects.get(name=name)
     attendee.unsubscribe()
 
 
@@ -35,8 +35,8 @@ def step_attendee_unsubscribes(context, name):
       'between {name1} and {name2}')
 def step_an_introduction_should_exist(context, name1, name2):
     intro = Introduction.objects.filter(
-        recipients__user__name=name1).filter(
-        recipients__user__name=name2).filter(
+        recipients__name=name1).filter(
+        recipients__name=name2).filter(
         scheduled_at__isnull=True,
     )
     context.test.assertEqual(len(intro), 1)
