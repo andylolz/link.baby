@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import HomeView, eventorganiser_create
+from .views import HomeView, event_create
 
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    path('create', eventorganiser_create, name='create'),
+    path('create', event_create, name='create'),
 ]

@@ -48,11 +48,18 @@ def step_the_total_number_of_introductions_should_be_num(context, num):
 
 
 @when('a user visits \'{url}\'')
-def a_user_visit_url(context, url):
+def step_a_user_visit_url(context, url):
     client = Client()
     context.response = client.get(url)
 
 
 @then('they see the text \'{text}\'')
-def they_see_the_text_text(context, text):
+def step_they_see_the_text_text(context, text):
     context.test.assertContains(context.response, text)
+
+
+@then('they see a form with the following fields')
+def step_they_see_a_form_with_fields(context):
+    # TODO: field types are currently ignored
+    for row in context.table:
+        context.test.assertContains(context.response, row['label'])
