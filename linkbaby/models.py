@@ -1,6 +1,7 @@
 import random
 import string
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
@@ -49,7 +50,8 @@ class LinkbabyUser(AbstractUser):
 
 
 class EventOrganiser(models.Model):
-    user = models.OneToOneField(LinkbabyUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.get_full_name()
@@ -74,7 +76,8 @@ class Event(models.Model):
 
 
 class EventAttendee(models.Model):
-    user = models.ForeignKey(LinkbabyUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     bio = models.TextField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     last_contacted_at = models.DateTimeField(null=True)
