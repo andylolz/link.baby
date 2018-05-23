@@ -62,7 +62,6 @@ class Linkup(models.Model):
     host = models.ForeignKey(Host, on_delete=models.CASCADE,
                              blank=False, null=False)
     welcome_message = models.TextField(blank=True, null=False)
-    took_place_at = models.DateTimeField(blank=True, null=True)
 
     @property
     def subscribed_linkees(self):
