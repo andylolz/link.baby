@@ -15,7 +15,7 @@ class LinkbabyUser(AbstractUser):
     unsubscribed_at = models.DateTimeField(null=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     @property
     def first_name(self):
