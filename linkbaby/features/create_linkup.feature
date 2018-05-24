@@ -20,4 +20,4 @@ Scenario: Check linkup creation works
         | Welcome message: | # Hi!\n\nWanted to put you all in touch. |
         | Recipients:      | Alice <alice@example.com>\nbob@bob.com   |
     Then the user should be redirected to '/'
-    And welcome emails are sent to all recipients
+    And welcome emails are sent to 2 recipients

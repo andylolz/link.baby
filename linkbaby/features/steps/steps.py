@@ -1,4 +1,5 @@
 from django.test import Client
+from django.core import mail
 from behave import given, when, then
 from bs4 import BeautifulSoup as bs
 
@@ -86,7 +87,6 @@ def step_then_redirected_to(context, url):
     context.test.assertRedirects(context.response, url)
 
 
-@then('welcome emails are sent to all recipients')
-def step_welcome_emails_sent(context):
-    raise NotImplementedError('STEP: Then welcome emails are sent ' +
-                              'to all recipients')
+@then('welcome emails are sent to {num:d} recipients')
+def step_welcome_emails_sent(context, num):
+    context.test.assertEqual(len(mail.outbox), num)
