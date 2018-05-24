@@ -1,4 +1,5 @@
 /core/settings/local.py
+/static
 
 # Ignore files
 *.ignore.*

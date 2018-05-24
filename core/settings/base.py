@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 from os.path import dirname, abspath, join
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = dirname(dirname(abspath(__file__)))
+# Build paths inside the project like this: join(BASE_DIR, ...)
+BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -123,3 +123,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = join(BASE_DIR, 'static')
