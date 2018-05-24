@@ -68,6 +68,13 @@ def step_they_see_a_form_with_fields(context):
         context.test.assertContains(context.response, row['label'])
 
 
+@given(u'the following stored as {variable}')
+def step_store_variable(context, variable):
+    if not hasattr(context, 'variables'):
+        context.variables = {}
+    context.variables[variable] = context.text
+
+
 @when('the user submits the following data')
 def step_user_submits_data(context):
     soup = bs(context.response.content, 'html.parser')
@@ -77,7 +84,12 @@ def step_user_submits_data(context):
     for row in context.table:
         id_ = soup.find('label', text=row['label']).get('for')
         name = soup.find(id=id_).get('name')
-        payload[name] = row['value']
+        value = row['value']
+        if hasattr(context, 'variables'):
+            for old, new in context.variables.items():
+                if old in value:
+                    value = value.replace(old, new)
+        payload[name] = value
 
     context.response = context.client.post(url, data=payload)
 
