@@ -6,3 +6,4 @@ Scenario: Check the form fields
         | label           | type     |
         | Linkup name     | Text     |
         | Welcome message | Textarea |
+        | Linkees         | Textarea |

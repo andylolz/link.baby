@@ -4,16 +4,15 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Host(models.Model):
-    name = models.CharField(max_length=200)
-    email = models.EmailField(_('email address'), blank=False, null=False,
-                              unique=True)
+    name = models.CharField(max_length=200, verbose_name=_('host name'))
+    email = models.EmailField(_('email address'), blank=False, null=False)
 
     def __str__(self):
-        return self.user.get_full_name()
+        return self.name
 
 
 class Linkup(models.Model):
-    name = models.CharField(max_length=200, verbose_name='Linkup name')
+    name = models.CharField(max_length=200, verbose_name=_('linkup name'))
     host = models.ForeignKey(Host, on_delete=models.CASCADE,
                              blank=False, null=False)
     welcome_message = models.TextField(blank=True, null=False)
@@ -30,9 +29,8 @@ class Linkup(models.Model):
 
 
 class Linkee(models.Model):
-    name = models.CharField(max_length=200)
-    email = models.EmailField(_('email address'), blank=False, null=False,
-                              unique=True)
+    name = models.CharField(max_length=200, blank=True, null=False)
+    email = models.EmailField(_('email address'), blank=False, null=False)
     bio = models.TextField()
     linkup = models.ForeignKey(Linkup, on_delete=models.CASCADE)
     last_contacted_at = models.DateTimeField(null=True)
@@ -78,7 +76,7 @@ class Linkee(models.Model):
         self.introduction_set.all().delete()
 
     def __str__(self):
-        return self.user.get_full_name()
+        return self.name
 
 
 class Introduction(models.Model):

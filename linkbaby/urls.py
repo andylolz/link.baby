@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import HomeView, linkup_create
+from .views import HomeView, LinkupView
 
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    path('create', linkup_create, name='create'),
+    path('create', LinkupView.as_view(), name='create'),
 ]

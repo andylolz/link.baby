@@ -1,30 +1,28 @@
-from django.forms import modelform_factory, inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 # from django.core.mail import send_mail
 
-from .models import Linkup, Host
+from .forms import LinkupMultiForm
 
 
 class HomeView(TemplateView):
     template_name = 'home.html'
 
 
-def linkup_create(request):
+class LinkupView(FormView):
     template_name = 'linkup_create.html'
-    LinkupForm = modelform_factory(Linkup, exclude=('user',))
-    OrganiserFormSet = inlineformset_factory(Host, Linkup,
-                                             exclude=(), can_delete=False,
-                                             min_num=1, max_num=1)
-    if request.method == 'POST':
-        linkup_form = LinkupForm(request.POST)
-        if linkup_form.is_valid():
-            linkup_form.save()
-            return HttpResponseRedirect('/')
-    else:
-        # form = LinkupForm()
-        form = None
-        formset = OrganiserFormSet()
+    form_class = LinkupMultiForm
+    success_url = '/'
 
-    return render(request, template_name, {'form': form, 'formset': formset})
+    def form_valid(self, form):
+        host = form['host'].save()
+        linkup = form['linkup'].save(commit=False)
+        linkup.host = host
+        linkup.save()
+        linkees = form['linkees'].save(commit=False)
+        for linkee in linkees:
+            linkee.linkup = linkup
+            linkee.save()
+        return super().form_valid(form)
