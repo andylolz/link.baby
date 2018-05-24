@@ -84,3 +84,9 @@ def step_user_submits_data(context):
 @then('the user should be redirected to \'{url}\'')
 def step_then_redirected_to(context, url):
     context.test.assertRedirects(context.response, url)
+
+
+@then('welcome emails are sent to all recipients')
+def step_welcome_emails_sent(context):
+    raise NotImplementedError('STEP: Then welcome emails are sent ' +
+                              'to all recipients')
