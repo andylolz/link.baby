@@ -1,8 +1,5 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-# from django.core.mail import send_mail
 
 from .forms import LinkupMultiForm
 
@@ -25,4 +22,7 @@ class LinkupView(FormView):
         for linkee in linkees:
             linkee.linkup = linkup
             linkee.save()
+
+        linkup.send_welcome_emails()
+
         return super().form_valid(form)

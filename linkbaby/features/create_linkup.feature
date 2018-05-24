@@ -4,6 +4,8 @@ Scenario: Check the form fields
     When a user visits '/create'
     Then they see a form with the following fields:
         | label           | type     |
+        | Host name       | Text     |
+        | Email address   | Text     |
         | Linkup name     | Text     |
         | Welcome message | Textarea |
-        | Linkees         | Textarea |
+        | Recipients      | Textarea |

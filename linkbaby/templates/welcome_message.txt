@@ -1,0 +1,5 @@
+{{ content }}
+
+--------------
+
+You’re receiving this because blah blah something.

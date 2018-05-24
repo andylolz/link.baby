@@ -1,11 +1,19 @@
+from email.utils import formataddr
+
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 
 class Host(models.Model):
     name = models.CharField(max_length=200, verbose_name=_('host name'))
     email = models.EmailField(_('email address'), blank=False, null=False)
+
+    @property
+    def formatted_email(self):
+        return formataddr((self.name, self.email))
 
     def __str__(self):
         return self.name
@@ -16,6 +24,22 @@ class Linkup(models.Model):
     host = models.ForeignKey(Host, on_delete=models.CASCADE,
                              blank=False, null=False)
     welcome_message = models.TextField(blank=True, null=False)
+
+    def send_welcome_emails(self):
+        linkees = self.linkee_set.filter(welcome_sent_at=None)
+        content = self.welcome_message
+        subject = '{} - Linkup'.format(self.name)
+        from_email = self.host.formatted_email
+        for linkee in linkees:
+            params = {'content': content, 'linkee': linkee}
+            msg_txt = render_to_string('welcome_message.txt', params)
+            msg_html = render_to_string('welcome_message.html', params)
+            send_mail(subject=subject, from_email=from_email,
+                      recipient_list=[linkee.formatted_email],
+                      message=msg_txt, html_message=msg_html,
+                      fail_silently=False)
+            linkee.welcome_sent_at = timezone.now()
+            linkee.save()
 
     @property
     def subscribed_linkees(self):
@@ -33,10 +57,15 @@ class Linkee(models.Model):
     email = models.EmailField(_('email address'), blank=False, null=False)
     bio = models.TextField()
     linkup = models.ForeignKey(Linkup, on_delete=models.CASCADE)
+    welcome_sent_at = models.DateTimeField(null=True)
     last_contacted_at = models.DateTimeField(null=True)
     last_scheduled_at = models.DateTimeField(null=True)
     subscribed_at = models.DateTimeField(null=True)
     unsubscribed_at = models.DateTimeField(null=True)
+
+    @property
+    def formatted_email(self):
+        return formataddr((self.name, self.email))
 
     @property
     def is_subscribed(self):
