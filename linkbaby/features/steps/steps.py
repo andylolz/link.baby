@@ -49,6 +49,7 @@ def step_the_total_number_of_introductions_should_be_num(context, num):
     context.test.assertEqual(Introduction.objects.count(), num)
 
 
+@given('a user visits \'{url}\'')
 @when('a user visits \'{url}\'')
 def step_a_user_visit_url(context, url):
     context.url = url
@@ -63,38 +64,42 @@ def step_they_see_the_text_text(context, text):
 
 @then('they see a form with the following fields')
 def step_they_see_a_form_with_fields(context):
-    # TODO: field types are currently ignored
     for row in context.table:
+        if all(map(lambda x: x == '-', row['label'])):
+            continue
         context.test.assertContains(context.response, row['label'])
 
 
-@given(u'the following stored as {variable}')
-def step_store_variable(context, variable):
-    if not hasattr(context, 'variables'):
-        context.variables = {}
-    context.variables[variable] = context.text
+def add_value_to_field(context, label, value):
+    if not hasattr(context, 'soup'):
+        context.soup = bs(context.response.content, 'html.parser')
+    if not hasattr(context, 'payload'):
+        context.payload = {x.get('name'): x.get('value')
+                           for x in context.soup.find_all('input')}
+        context.payload.update({x.get('name'): x.text
+                                for x in context.soup.find_all('textarea')})
+    id_ = context.soup.find('label', text=label).get('for')
+    name = context.soup.find(id=id_).get('name')
+    context.payload[name] = value
 
 
-@when('the user submits the following data')
-def step_user_submits_data(context):
-    soup = bs(context.response.content, 'html.parser')
-    url = soup.form.get('action', context.url)
-    payload = {x.get('name'): x.get('value') for x in soup.find_all('input')}
-    payload.update({x.get('name'): x.text for x in soup.find_all('textarea')})
-    for row in context.table:
-        id_ = soup.find('label', text=row['label']).get('for')
-        name = soup.find(id=id_).get('name')
-        value = row['value']
-        if hasattr(context, 'variables'):
-            for old, new in context.variables.items():
-                if old in value:
-                    value = value.replace(old, new)
-        payload[name] = value
-
-    context.response = context.client.post(url, data=payload)
+@given('in the "{label}" field, enters "{value}"')
+def step_enters_value_in_the_field(context, label, value):
+    add_value_to_field(context, label, value)
 
 
-@then('the user should be redirected to \'{url}\'')
+@given('in the "{label}" field, enters')
+def step_enters_long_value_in_the_field(context, label):
+    add_value_to_field(context, label, context.text)
+
+
+@when('they submit the form')
+def step_submit_form(context):
+    url = context.soup.form.get('action', context.url)
+    context.response = context.client.post(url, data=context.payload)
+
+
+@then('they should be redirected to \'{url}\'')
 def step_then_redirected_to(context, url):
     context.test.assertRedirects(context.response, url)
 
