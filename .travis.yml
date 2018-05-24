@@ -3,5 +3,7 @@ python:
   - "3.6"
 install:
   - pip install -r requirements_dev.txt
+env:
+  - DJANGO_SETTINGS_MODULE="core.settings.testing"
 script:
   - python manage.py behave

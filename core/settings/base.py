@@ -10,10 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
+import sys
 from os.path import dirname, abspath, join
 
-
-import django_heroku
 
 # Build paths inside the project like this: join(BASE_DIR, ...)
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
@@ -87,7 +86,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -126,5 +124,3 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = join(BASE_DIR, 'static')
-
-django_heroku.settings(locals())
