@@ -1,5 +1,4 @@
-link.baby
-=========
+# link.baby
 
 ![logo inspiration](logo-inspiration.png)
 
@@ -14,13 +13,11 @@ Instead:
  3. Those who opt in then receive a series of emails from [link.baby](https://link.baby) – one per day – introducing them to a different attendee
  4. Participants can opt out at any time, using the opt out link
 
-Requirements
-------------
+### Requirements
 
 Python 3.6 or thereabouts.
 
-Installation
-------------
+### Installation
 
 This is a django site. It’s all pretty standard.
 
@@ -44,7 +41,7 @@ This is a django site. It’s all pretty standard.
     echo "export DJANGO_SETTINGS_MODULE=\"core.settings.local\"" >> venv/bin/activate
     ```
 
-4. Update local.py with your settings. Then load the env:
+4. Update `core/settings/local.py` with your settings. Then load the env:
 
     ```shell
     source venv/bin/activate
@@ -62,22 +59,19 @@ This is a django site. It’s all pretty standard.
     python manage.py migrate
     ```
 
-Running
--------
+### Running
 
 ```shell
 python manage.py runserver
 ```
 
-Testing
--------
+### Testing
 
 ```shell
 DJANGO_SETTINGS_MODULE="core.settings.testing" python manage.py behave
 ```
 
-Deploying to Heroku
--------------------
+### Deploying to Heroku
 
 ```shell
 git remote add heroku https://git.heroku.com/linkbaby.git
