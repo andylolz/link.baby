@@ -71,6 +71,13 @@ python manage.py runserver
 DJANGO_SETTINGS_MODULE="core.settings.testing" python manage.py behave
 ```
 
+### Setting up on heroku
+
+```shell
+heroku create app-name
+heroku config:set DJANGO_SETTINGS_MODULE=core.settings.heroku
+```
+
 ### Deploying to Heroku
 
 ```shell
