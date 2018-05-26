@@ -93,8 +93,8 @@ def step_enters_long_value_in_the_field(context, label):
     add_value_to_field(context, label, context.text)
 
 
-@when('they submit the form')
-def step_submit_form(context):
+@when('the user submits the form')
+def step_submits_form(context):
     url = context.soup.form.get('action', context.url)
     context.response = context.client.post(url, data=context.payload)
 
@@ -104,6 +104,7 @@ def step_then_redirected_to(context, url):
     context.test.assertRedirects(context.response, url)
 
 
-@then('welcome emails are sent to {num:d} recipients')
-def step_welcome_emails_sent(context, num):
-    context.test.assertEqual(len(mail.outbox), num)
+@then('an email is sent to "{recipient}"')
+def step_an_email_is_sent_to(context, recipient):
+    mails_to = [x.to for x in mail.outbox]
+    context.test.assertIn([recipient], mails_to)

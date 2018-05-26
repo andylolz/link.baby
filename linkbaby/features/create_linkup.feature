@@ -27,6 +27,7 @@ Scenario: Check linkup creation works
         Alice <alice@example.com>
         bob@bob.com
         """
-    When they submit the form
+    When the user submits the form
     Then they are redirected to '/'
-    And welcome emails are sent to 2 recipients
+    And an email is sent to "Alice <alice@example.com>"
+    And an email is sent to "bob@bob.com"
