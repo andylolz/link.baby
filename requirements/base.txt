@@ -1,0 +1,5 @@
+Django
+psycopg2-binary
+django-widget-tweaks
+django-betterforms
+django-markdown-deux

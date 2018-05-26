@@ -50,7 +50,7 @@ This is a django site. It’s all pretty standard.
 5. Install the dependencies:
 
     ```shell
-    pip install requirements_dev.txt
+    pip install requirements/local.txt
     ```
 
 6. Setup the database:

@@ -3,7 +3,7 @@ python:
   - "3.6"
 cache: pip
 install:
-  - pip install -r requirements_dev.txt
+  - pip install -r requirements/testing.txt
 env:
   - DJANGO_SETTINGS_MODULE="core.settings.testing"
 script:
