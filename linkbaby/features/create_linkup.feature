@@ -28,5 +28,5 @@ Scenario: Check linkup creation works
         bob@bob.com
         """
     When they submit the form
-    Then they should be redirected to '/'
+    Then they are redirected to '/'
     And welcome emails are sent to 2 recipients

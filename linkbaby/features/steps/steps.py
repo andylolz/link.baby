@@ -33,9 +33,9 @@ def step_attendee_unsubscribes(context, name):
     attendee.unsubscribe()
 
 
-@then('an unscheduled introduction should be created ' +
+@then('an unscheduled introduction is created ' +
       'between {name1} and {name2}')
-def step_an_introduction_should_exist(context, name1, name2):
+def step_an_introduction_is_created(context, name1, name2):
     intro = Introduction.objects.filter(
         recipients__name=name1).filter(
         recipients__name=name2).filter(
@@ -44,8 +44,8 @@ def step_an_introduction_should_exist(context, name1, name2):
     context.test.assertEqual(len(intro), 1)
 
 
-@then('the total number of introductions should be {num:d}')
-def step_the_total_number_of_introductions_should_be_num(context, num):
+@then('the total number of introductions is {num:d}')
+def step_the_total_number_of_introductions_is_num(context, num):
     context.test.assertEqual(Introduction.objects.count(), num)
 
 
@@ -99,7 +99,7 @@ def step_submit_form(context):
     context.response = context.client.post(url, data=context.payload)
 
 
-@then('they should be redirected to \'{url}\'')
+@then('they are redirected to \'{url}\'')
 def step_then_redirected_to(context, url):
     context.test.assertRedirects(context.response, url)
 
