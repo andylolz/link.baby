@@ -38,7 +38,7 @@ This is a django site. It’s all pretty standard.
 
     ```shell
     cp core/settings/local.py.example core/settings/local.py
-    echo "export DJANGO_SETTINGS_MODULE=\"core.settings.local\"" >> venv/bin/activate
+    echo "DJANGO_SETTINGS_MODULE=core.settings.local" > .env
     ```
 
 4. Update `core/settings/local.py` with your settings. Then load the env:
