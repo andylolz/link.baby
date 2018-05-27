@@ -83,12 +83,12 @@ def add_value_to_field(context, label, value):
     context.payload[name] = value
 
 
-@given('in the "{label}" field, enters "{value}"')
+@given('in the "{label}" field, the user enters "{value}"')
 def step_enters_value_in_the_field(context, label, value):
     add_value_to_field(context, label, value)
 
 
-@given('in the "{label}" field, enters')
+@given('in the "{label}" field, the user enters')
 def step_enters_long_value_in_the_field(context, label):
     add_value_to_field(context, label, context.text)
 
@@ -108,3 +108,9 @@ def step_then_redirected_to(context, url):
 def step_an_email_is_sent_to(context, recipient):
     mails_to = [x.to for x in mail.outbox]
     context.test.assertIn([recipient], mails_to)
+
+
+@then('the email subject line is "{subject}"')
+def step_the_email_subject_is(context, subject):
+    email = mail.outbox[0]
+    context.test.assertEqual(email.subject, subject)
